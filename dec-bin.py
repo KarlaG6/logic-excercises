@@ -97,16 +97,49 @@ def dec_bin_c2(dec):
     numbody = {}
     aux = suma = 0
     suma = 2**expo*-1*sign
-    numbody.update({str(2**expo*-1): sign})
+    # numbody.update({str(2**expo*-1): sign})
+    # quite 2**expo*-1 por 2**expo pues solo es representativo
+    numbody[2**expo] = sign
     aux = suma + 2**expo
     while suma != dec:
 
         expo -= 1
         aux = suma + 2**expo
-        numbody.update({str(2**expo) : dec >= aux})
+
+        # numbody.update({str(2**expo) : dec >= aux})
+        numbody[2**expo] = dec >= aux
         if dec >= aux:
             suma += 2**expo
 
     return numbody
 
-print(dec_bin_c2(-7.25))
+def sort_numbody(numbody):
+    rslt = numbody.items()
+    for x,y in rslt:
+        numbody.update({ x : y})
+
+    rslt = sorted(rslt)
+    print(numbody)
+    print(rslt)
+    return rslt
+
+
+def format_bin_ptfloat(numbody):
+    rslt = ''
+    # Esto era para cuando lo manejaba como diccionario
+    # for x, y in numbody.items():
+    #     if x == 1:
+    #         rslt += '.'
+    #     rslt += str(int(y))
+    for x in numbody:
+        if x[0] == 1:
+            rslt += '.'
+        rslt += str(int(x[1]))
+    return rslt[::-1]
+
+numie = 9.5
+print(numie)
+# print(dec_bin_c2(numie))
+sort_numbody(dec_bin_c2(numie))
+# print(format_bin_ptfloat(dec_bin_c2(numie)))
+print(format_bin_ptfloat(sort_numbody(dec_bin_c2(numie))))
