@@ -81,8 +81,28 @@ def newton_raphson(f, x_i, tol, i):
             print(tabulate(zip(counters, a_values, b_values, x_r_values), headers=['iteraciones', 'a', 'b', 'x_r'], tablefmt='orgtbl'))
             return x_r
         x_i = x_r
+        print('No se pudo hallar la raiz a las {} iteraciones'.format(i))
 
-    
+# ---------------- Secante ------------------------------------
+
+def secante(f, x_i, x_1, tol, i):
+    f = sp.lambdify(x, f)
+    counters=[]
+    a_values=[]
+    b_values=[]
+    x_r_values=[]
+    for j in range(i):
+        x_r = x_1 - (x_1-x_i)*f(x_1)/(f(x_1) - f(x_i))
+        counters.append(j)
+        a_values.append(x_i)
+        b_values.append(x_1)
+        x_r_values.append(x_r)
+        if (np.abs(x_r - x_1) < tol):
+            print(tabulate(zip(counters, a_values, b_values, x_r_values), headers=['iteraciones', 'x_inicial', 'x_1', 'x_r'], tablefmt='orgtbl'))
+            return x_r
+        x_i = x_1
+        x_1 = x_r
+    print('No se pudo hallar la raiz a las {} iteraciones'.format(i))
             
 # -------------------- estructura del programa -------------------
 
@@ -110,7 +130,7 @@ while option != 0:
     elif option == 2:
         newton_raphson(f, pi, 0.001, 10)
     elif option == 3:
-        print('usar metodo de la secante')
+        secante(f, 0.78, 1.5, 0.001, 20)
     elif option == 4:
         print('usar metodo de la regla falsa')
     else:
